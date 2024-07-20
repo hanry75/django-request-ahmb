@@ -6,3 +6,4 @@ __author__ = [
     "krisje8 <krisje8@gmail.com>",
     "Mariusz Felisiak <felisiak.mariusz@gmail.com>",
 ]
+default_app_config = 'django_request_ahmb.request.apps.RequestAdminConfig'
