@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='django_request_ahmb',
     version='1.0.0',
-    packages=find_packages(),
+    packages=find_packages(include=['django_request_ahmb', 'django_request_ahmb.*']),
     include_package_data=True,
     install_requires=[
         'Django>=3.8',
