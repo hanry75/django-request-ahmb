@@ -49,7 +49,7 @@ class Request(models.Model):
     objects = RequestManager()
 
     class Meta:
-        app_label = "request"
+        app_label = "django_request_ahmb"
         verbose_name = _("request")
         verbose_name_plural = _("requests")
         ordering = ("-time",)
