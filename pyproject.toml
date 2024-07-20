@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "django-request"
-version = "1.6.3"
+name = "django_request_ahmb"
+version = "1.0.0"
 dependencies = [
     "Django>=4.2",
     "python-dateutil",
