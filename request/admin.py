@@ -9,13 +9,13 @@ from django.urls import path
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from .models import Request
-from .plugins import plugins
-from .traffic import modules
+from django_request_ahmb.request.models import Request
+from django_request_ahmb.request.plugins import plugins
+from django_request_ahmb.request.traffic import modules
 
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ("time", "path", "response", "method", "request_from")
+    list_display = ("time", "path", "ip", "country", "city","response", "method", "request_from")
     fieldsets = (
         (_("Request"), {"fields": ("method", "path", "time", "is_secure", "is_ajax")}),
         (_("Response"), {"fields": ("response",)}),
@@ -26,6 +26,13 @@ class RequestAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ("user",)
     readonly_fields = ("time",)
+
+    def changelist_view(self, request, extra_context=None):
+        if extra_context is None:
+            extra_context = {}
+        extra_context['total_visits'] = Request.get_total_visits()
+        return super().changelist_view(request, extra_context=extra_context)
+    
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("user")
@@ -73,7 +80,7 @@ class RequestAdmin(admin.ModelAdmin):
 
         return render(
             request,
-            "admin/request/request/overview.html",
+            "admin/django_request_ahmb/request/overview.html",
             {
                 "title": _("Request overview"),
                 "plugins": plugins.plugins,
@@ -100,6 +107,8 @@ class RequestAdmin(admin.ModelAdmin):
         return HttpResponse(
             json.dumps(modules.graph(days_qs)), content_type="text/javascript"
         )
+    
+
 
 
 admin.site.register(Request, RequestAdmin)

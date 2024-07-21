@@ -9,12 +9,13 @@
     </tr>
     {% for request in requests %}
         <tr>
-            <td><a href="{% url "admin:request_request_changelist" %}?path={{ request.path }}" title="{{ request.path }}">{{ request.path|truncatechars:35 }}</a></td>
+            <td><a href="{% url "admin:django_request_ahmb_request_changelist" %}?path={{ request.path }}" title="{{ request.path }}">{{ request.path|truncatechars:35 }}</a></td>
             <td>{% firstof request.get_user request.ip %}</td>
             <td>{{ request.get_response_display }}</td>
-            <td><a href="{% url "admin:request_request_change" request.id %}">
+            <td><a href="{% url "admin:django_request_ahmb_request_change" request.id %}">
                 <abbr class="timeago" title="{{ request.time|date:"c" }}">{{ request.time|date:"D M d H:i:s O Y" }}</abbr>
             </a></td>
         </tr>
     {% endfor %}
 {% endblock %}
+

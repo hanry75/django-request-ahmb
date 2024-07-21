@@ -10,9 +10,9 @@
         <script type="text/javascript">
         function loadTrafficGraph(days) {
             if (days == undefined) {
-                path = "{% url "admin:request_request_traffic" %}";
+                path = "{% url "admin:django_request_ahmb_request_traffic" %}";
             } else {
-                path = "{% url "admin:request_request_traffic" %}?days=" + days;
+                path = "{% url "admin:django_request_ahmb_request_traffic" %}?days=" + days;
             }
 
             $.getJSON(path, function(data) {
@@ -31,8 +31,8 @@
     {% if request and request.user %}
         <div class="breadcrumbs">
             <a href="{% url "admin:index" %}">{% translate "Home" %}</a> &rsaquo;
-            <a href="{% url "admin:app_list" "request" %}">{% translate "Request" %}</a> &rsaquo;
-            <a href="{% url "admin:request_request_changelist" %}">{% translate "Requests" %}</a> &rsaquo;
+            <a href="{% url "admin:app_list" "django_request_ahmb" %}">{% translate "Request" %}</a> &rsaquo;
+            <a href="{% url "admin:django_request_ahmb_request_changelist" %}">{% translate "Requests" %}</a> &rsaquo;
             {% translate "Overview" %}
         </div>
     {% endif %}

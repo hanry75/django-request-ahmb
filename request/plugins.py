@@ -1,10 +1,10 @@
 from django.db.models import Count
 from django.template.loader import render_to_string
 
-from . import settings
-from .models import Request
-from .traffic import modules
-from .utils import get_verbose_name
+from django_request_ahmb.request import settings
+from django_request_ahmb.request.models import Request
+from django_request_ahmb.request.traffic import modules
+from django_request_ahmb.request.utils import get_verbose_name
 
 
 def set_count(items):

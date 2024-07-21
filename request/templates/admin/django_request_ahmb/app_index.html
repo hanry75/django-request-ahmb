@@ -5,7 +5,9 @@
 <div id="content-main">
 
 {% if app_list %}
+
     {% for app in app_list %}
+
         <div class="module">
         <table summary="{% blocktranslate with app.name as name %}Models available in the {{ name }} application.{% endblocktranslate %}">
         <caption><a href="{{ app.app_url }}" class="section">{% blocktranslate with app.name as name %}{{ name }}{% endblocktranslate %}</a></caption>

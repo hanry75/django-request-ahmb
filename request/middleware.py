@@ -36,18 +36,22 @@ class RequestMiddleware(MiddlewareMixin):
         if getattr(request, "user", False):
             if request.user.get_username() in settings.IGNORE_USERNAME:
                 return response
+        
+        
+            
+        if 'text/html' in response['Content-Type']:
 
-        r = Request()
-        try:
-            r.from_http_request(request, response, commit=False)
-            r.full_clean()
-        except ValidationError as exc:
-            logger.warning(
-                "Bad request: %s",
-                str(exc),
-                exc_info=exc,
-                extra={"status_code": 400, "request": request},
-            )
-        else:
-            r.save()
+            r = Request()
+            try:
+                r.from_http_request(request, response, commit=False)
+                r.full_clean()
+            except ValidationError as exc:
+                logger.warning(
+                    "Bad request: %s",
+                    str(exc),
+                    exc_info=exc,
+                    extra={"status_code": 400, "request": request},
+                )
+            else:
+                r.save()
         return response

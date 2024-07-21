@@ -21,9 +21,9 @@ TRAFFIC_MODULES = getattr(
     settings,
     "REQUEST_TRAFFIC_MODULES",
     (
-        "request.traffic.UniqueVisitor",
-        "request.traffic.UniqueVisit",
-        "request.traffic.Hit",
+        "django_request_ahmb.request.traffic.UniqueVisitor",
+        "django_request_ahmb.request.traffic.UniqueVisit",
+        "django_request_ahmb.request.traffic.Hit",
     ),
 )
 
@@ -31,12 +31,12 @@ PLUGINS = getattr(
     settings,
     "REQUEST_PLUGINS",
     (
-        "request.plugins.TrafficInformation",
-        "request.plugins.LatestRequests",
-        "request.plugins.TopPaths",
-        "request.plugins.TopErrorPaths",
-        "request.plugins.TopReferrers",
-        "request.plugins.TopSearchPhrases",
-        "request.plugins.TopBrowsers",
+        "django_request_ahmb.request.plugins.TrafficInformation",
+        "django_request_ahmb.request.plugins.LatestRequests",
+        "django_request_ahmb.request.plugins.TopPaths",
+        "django_request_ahmb.request.plugins.TopErrorPaths",
+        "django_request_ahmb.request.plugins.TopReferrers",
+        "django_request_ahmb.request.plugins.TopSearchPhrases",
+        "django_request_ahmb.request.plugins.TopBrowsers",
     ),
 )

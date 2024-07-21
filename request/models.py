@@ -6,12 +6,19 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from . import settings as request_settings
-from .managers import RequestManager
-from .utils import HTTP_STATUS_CODES, browsers, engines, request_is_ajax
+from django_request_ahmb.request import settings as request_settings
+from django_request_ahmb.request.managers import RequestManager
+from django_request_ahmb.request.utils import HTTP_STATUS_CODES, browsers, engines, request_is_ajax
+
+from django_countries.fields import CountryField
+from geoip2.database import Reader
+
+from django.conf import settings
 
 AUTH_USER_MODEL = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 
+# Path to your GeoLite2 City database from settings
+GEOIP2_DB_PATH = settings.GEOIP_PATH + '/GeoLite2-City.mmdb'
 
 class Request(models.Model):
     # Response information.
@@ -33,6 +40,10 @@ class Request(models.Model):
 
     # User information.
     ip = models.GenericIPAddressField(_("ip address"))
+    country = CountryField(max_length=255, blank=True, null=True)  
+    city = models.CharField(max_length=255, blank=True, null=True)
+    latitude = models.FloatField(null=True, blank=True, default=0.0)
+    longitude = models.FloatField(null=True, blank=True, default=0.0)
     user = models.ForeignKey(
         AUTH_USER_MODEL,
         blank=True,
@@ -115,6 +126,43 @@ class Request(models.Model):
             return gethostbyaddr(self.ip)[0]
         except Exception:  # socket.gaierror, socket.herror, etc
             return self.ip
+        
+    @property
+    def geolocation(self):
+        if not hasattr(self, "_geolocation"):
+            try:
+                reader = Reader(GEOIP2_DB_PATH)
+                response = reader.city(self.ip)
+                self._geolocation = {
+                    "country": response.country.name,
+                    "city": response.city.name,
+                    "latitude": response.location.latitude,
+                    "longitude": response.location.longitude,
+                }
+            except Exception:
+                self._geolocation = {
+                    "country": None,
+                    "city": None,
+                    "latitude": None,
+                    "longitude": None,
+                }
+        return self._geolocation
+
+    @property
+    def country(self):
+        return self.geolocation["country"]
+
+    @property
+    def city(self):
+        return self.geolocation["city"]
+
+    @property
+    def latitude(self):
+        return self.geolocation["latitude"]
+
+    @property
+    def longitude(self):
+        return self.geolocation["longitude"]
 
     def save(self, *args, **kwargs):
         if not request_settings.LOG_IP:
@@ -127,3 +175,9 @@ class Request(models.Model):
             self.user = None
 
         super().save(*args, **kwargs)
+
+    @classmethod
+    def get_total_visits(cls):
+        return cls.objects.count()
+
+
